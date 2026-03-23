@@ -28,7 +28,7 @@ void setup() {
   afficherStatut();
 }
 void loop() {
-  if (digitalRead(RESET_BTN) == HIGH) {
+  if (digitalRead(RESET_BTN) == LOW) {
     passagers = 0;
     lcd.clear();
     lcd.print("REINITIALISATION");
