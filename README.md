@@ -5,7 +5,7 @@ Système d'Information Embarqué pour éviter l'oubli de passagers lors d'excurs
 **Simulation** : Wokwi | **Projet Intégration** 2024-2025
 ## Simulation rapide sur Wokwi (sans installation)
 
-1. Ouvrir le lien : https://wokwi.com/projects/new/arduino-uno
+1. Ouvrir le lien : https://wokwi.com/projects/459328021117409281
 2. Cliquer sur le bouton **Run** (triangle vert)
 3. Cliquer sur une **carte RFID** pour simuler un scan de badge
 4. Observer le LCD, les LEDs et le buzzer en temps réel
@@ -48,7 +48,7 @@ git clone https://github.com/salmakhili8-ji/projet-integration-salma
 | RFID MOSI | D11 |
 | RFID MISO | D12 |
 | RFID SCK | D13 |
-| RFID VCC | **3.3V** ⚠️ (pas 5V !) |
+| RFID VCC | **3.3V** (pas 5V !) |
 | HC-SR04 TRIG | D4 |
 | HC-SR04 ECHO | D3 |
 | LCD SDA | A4 |
