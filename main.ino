@@ -12,7 +12,9 @@
 MFRC522 rfc(SS_PIN, RST_PIN);
 LiquidCrystal_I2C lcd(0x27, 16, 2); 
 int passagers = 0;
-const int SEUIL_MAX = 30;
+const int SEUIL_MAX = 30
+String uids_vus[SEUIL_MAX]; 
+int total_uids = 0;
 void setup() {
   pinMode(LED_V, OUTPUT);
   pinMode(LED_R, OUTPUT);
@@ -30,6 +32,8 @@ void setup() {
 void loop() {
   if (digitalRead(RESET_BTN) == LOW) {
     passagers = 0;
+    total_uids = 0;
+    for(int i = 0; i < SEUIL_MAX; i++) uids_vus[i] = "";
     lcd.clear();
     lcd.print("REINITIALISATION");
     lcd.setCursor(0, 1);
@@ -49,7 +53,26 @@ void loop() {
   if (!rfc.PICC_IsNewCardPresent() || !rfc.PICC_ReadCardSerial()) {
     return;
   }
+    String uidActuel = "";
+  for (byte i = 0; i < rfc.uid.size; i++) {
+    uidActuel += String(rfc.uid.uidByte[i], HEX);
+  }
+  if (estUnDoublon(uidActuel)) {
+    digitalWrite(LED_R, HIGH);
+    tone(BUZZER, 300, 500); 
+    lcd.clear();
+    lcd.print("CARTE DEJA SCAN");
+    lcd.setCursor(0, 1);
+    lcd.print("Acces refuse !");
+    delay(2000);
+    digitalWrite(LED_R, LOW);
+    afficherStatut(); 
+    rfc.PICC_HaltA(); 
+    return;
+  }
   if (passagers < SEUIL_MAX) {
+    uids_vus[total_uids] = uidActuel; 
+    total_uids++;
     passagers++;
     digitalWrite(LED_V, HIGH);
     tone(BUZZER, 1500, 200);
@@ -71,6 +94,12 @@ void loop() {
   }
   afficherStatut();
   rfc.PICC_HaltA(); 
+}
+bool estUnDoublon(String id) {
+  for (int i = 0; i < total_uids; i++) {
+    if (uids_vus[i] == id) return true;
+  }
+  return false;
 }
 long lireDistance() {
   digitalWrite(TRIG_PIN, LOW);
